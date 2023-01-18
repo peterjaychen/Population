@@ -13,11 +13,11 @@ import java.util.Scanner;
 public class Population {
 	
 	// List of cities
-	private List<City> cities;
-	private int choice;
+	private List<City> cities; // array that contains all the city objects
+							// read in from the textfile
+	private int choice; // choice the user has made in the menu
 	
 	// US data file
-	// private final String DATA_FILE = "debugDataFile.txt"; // need to chang back later
 	private final String DATA_FILE = "usPopData2017.txt";
 	
 	public Population() {
@@ -60,13 +60,9 @@ public class Population {
 			getInput();
 		}
 	}
-
-	public void debugCityList() {
-		for (City c : cities) {
-			System.out.println(c);
-		}	
-	}
-
+	/**
+	 * Reads text file and stores information into cities array. 
+	 */
 	public void getTextFile() {
 		Scanner populationReader = FileUtils.openToRead(DATA_FILE);
         populationReader.useDelimiter("[\t\n]");
@@ -83,7 +79,10 @@ public class Population {
 			cities.add(c);
 		}
 	}
-	
+	/**
+	 * Gets the user's input from the terminal and stores the choice into 
+	 * variable choice. 
+	 */
 	public void getInput() {
 		boolean validInput = false;
 		while(!validInput) {
@@ -92,11 +91,6 @@ public class Population {
 				validInput = true;
 			}
 		}
-		sortStuff();
-	}
-
-	public void sortStuff() 
-	{
 		if(choice == 1) 
 			sort1();
 		else if(choice == 2)
@@ -112,10 +106,14 @@ public class Population {
 		else if(choice == 9)
 			quit();
 	}
+	
+		
+	
 	/**
 	 * Sort with the least populous cities 
 	 */
 	public void sort1() {
+		System.out.println("50 least populous cities");
 		long startMillisec = System.currentTimeMillis();
 		SortMethods sm = new SortMethods();
 		sm.selectionSort(cities);
@@ -127,6 +125,7 @@ public class Population {
 	 * Sort with most populus cities
 	 */
 	public void sort2() {
+		System.out.println("Fifty most populous cities");
 		long startMillisec = System.currentTimeMillis();
 		SortMethods sm = new SortMethods();
 		sm.mergeSort(cities, new PopulationGreatestToLeast());
@@ -134,7 +133,11 @@ public class Population {
 		print50Cities();
 		System.out.println("Time elapsed: " + (endMillisec - startMillisec) + " milliseconds");
 	}
+	/**
+	 * Sort cities by name
+	 */
 	public void sort3() {
+		System.out.println("Fifty cities sorted by name");
 		long startMillisec = System.currentTimeMillis();
 		SortMethods sm = new SortMethods();
 		sm.insertionSort(cities, new NameAToZ());
@@ -142,7 +145,11 @@ public class Population {
 		print50Cities();
 		System.out.println("Time elapsed: " + (endMillisec - startMillisec) + " milliseconds");
 	}
+	/**
+	 * Sort cities by name descending 
+	 */
 	public void sort4() {
+		System.out.println("Fifty cities sorted by name descending");
 		long startMillisec = System.currentTimeMillis();
 		SortMethods sm = new SortMethods();
 		sm.mergeSort(cities, new NameZToA());
@@ -150,7 +157,9 @@ public class Population {
 		print50Cities();
 		System.out.println("Time elapsed: " + (endMillisec - startMillisec) + " milliseconds");
 	}
-		
+	/**
+	 * Most populous cities given a state
+	 */
 	public void sort5() {
 		boolean validInput = false;
 		while(!validInput)
@@ -160,6 +169,7 @@ public class Population {
 				validInput = false;
 				System.out.println("ERROR: " + stateNameIn + " is not valid");
 			} else {
+				System.out.println("Fifty most populous cities in " + stateNameIn);
 				long startMillisec = System.currentTimeMillis();
 				validInput = true;
 				for(int i = 0; i < cities.size(); i++)
@@ -182,6 +192,9 @@ public class Population {
 			}
 		}
 	}
+	/**
+	 * Given city, sort population
+	 */
 	public void sort6() {
 		boolean validInput = false;
 		while(!validInput)
@@ -206,14 +219,19 @@ public class Population {
 					}
 				}
 				long endMillisec = System.currentTimeMillis();
+				System.out.println("City " + cityNameToMatch + " by population");
 				print50Cities();
 				System.out.println("Time elapsed: " + (endMillisec - startMillisec) + " milliseconds");
 			}
 		}
 	}
 
+	/**
+	 * Print up to 50 Cities, or the size of the Cities List, whichever is smaller
+	 * smaller needed for choices (5 and 6)
+	 */
 	public void print50Cities() {
-		// Print up to 50 Cities, or the size of the Cities List, whichever is smaller
+		
 		System.out.printf("    %-22s %-22s %-12s %12s\n", "State", "City", "Type", "Population");
 		for(int i = 1; i <= Math.min(50, cities.size()); i++) {
 			System.out.printf("%2d: ", i);
@@ -221,6 +239,14 @@ public class Population {
 		}
 	}
 	
+	/**
+	 * Methods that searches for the index of the state
+	 * 
+	 * @param  arr 		Array that contains list of city objects
+	 * @param  search	String of the stateName that is being searched 
+	 * 
+	 * @return index of the state in arr if found, it not, returns -1
+	 */
 	public int searchState(List <City> arr, String search) {
 		int left = 0;
 		int right = arr.size()-1;
@@ -239,7 +265,15 @@ public class Population {
 		}	
 		return -1; // not found			
 	}
-
+	
+	/**
+	 * Methods that searches for the index of the city
+	 * 
+	 * @param  arr 		Array that contains list of city objects
+	 * @param  search	String of the cityName that is being searched 
+	 * 
+	 * @return index of the city in arr if found, it not, returns -1
+	 */
 	public int searchCity(List <City> arr, String search) {
 		int left = 0;
 		int right = arr.size()-1;
